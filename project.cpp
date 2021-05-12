@@ -1,10 +1,11 @@
 
 #include "project.h"
-
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include <curses.h>
 #include <vector>
 
 #define MAX_PATH 2048
@@ -145,7 +146,6 @@ int main() {
     Mat_<Vec3b> stop_sign = imread("ProjectImages/stop_sign_road.bmp", IMREAD_COLOR);
     convert_to_HSV(stop_sign);
     Mat_<uchar> hue_stop_sign = hue.clone();
-
     uchar real_hue_value = hue_stop_sign(stop_sign.rows/4, stop_sign.cols/2);
     printf("real hue value = %d\n", real_hue_value);
 
