@@ -1,15 +1,19 @@
-
+//Florin Petrean
+//Pop Tudor
+//group 30432
 #include "project.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <curses.h>
+//#include <unistd.h>
+//#include <curses.h>
 #include <vector>
+#include "stdafx.h"
+#include "common.h"
+#include <math.h>
 
 #define MAX_PATH 2048
-
 
 using namespace std;
 using namespace cv;
@@ -61,7 +65,7 @@ void L06_border_tracing(){
         pixel = new_pixel;
         AC.emplace_back(dir);
         DC.emplace_back((dir - old_dir + 8) % 8);
-    }while(not(Pn == P1 && Pm == P0 && n >= 2));
+    }while(!(Pn == P1 && Pm == P0 && n >= 2));
 
     printf("AC: \n");
     for(int ac : AC){
@@ -135,22 +139,34 @@ void convert_to_HSV(Mat_<Vec3b> src){
 //    imshow("value img", value);
 }
 
-uchar get_hue_value(){
-    Mat_<Vec3b> src = imread("ProjectImages/stop_sign.bmp", IMREAD_COLOR);
-    convert_to_HSV(src);
-    Mat_<uchar> hue_src = hue.clone();
-    return hue_src(src.rows/4, src.cols/2);
+uchar get_hue_value() {
+	Mat_<Vec3b> src = imread("ProjectImages/stop_sign.bmp", IMREAD_COLOR);
+	convert_to_HSV(src);
+	Mat_<uchar> hue_src = hue.clone();
+	return hue_src(src.rows / 4, src.cols / 2);
 }
 
 int main() {
-    Mat_<Vec3b> stop_sign = imread("ProjectImages/stop_sign_road.bmp", IMREAD_COLOR);
-    convert_to_HSV(stop_sign);
-    Mat_<uchar> hue_stop_sign = hue.clone();
-    uchar real_hue_value = hue_stop_sign(stop_sign.rows/4, stop_sign.cols/2);
-    printf("real hue value = %d\n", real_hue_value);
+	Mat_<Vec3b> stop_sign = imread("ProjectImages/stop_sign_road.bmp", IMREAD_COLOR);
+	convert_to_HSV(stop_sign);
+	Mat_<uchar> hue_stop_sign = hue.clone();
+	uchar real_hue_value = hue_stop_sign(stop_sign.rows / 4, stop_sign.cols / 2);
+	printf("real hue value = %d\n", real_hue_value);
 
-    uchar hue_value = get_hue_value();
-    printf("virtual hue value = %d\n", hue_value);
+	uchar hue_value = get_hue_value();
+	printf("virtual hue value = %d\n", hue_value);
 
+	Mat_<Vec3b> hue_mask = Mat(stop_sign.rows, stop_sign.cols, CV_8UC3);
+
+	for (int i = 0; i < hue_mask.rows; i++) {
+		for (int j = 0; j < hue_mask.cols; j++) {
+			if (hue_stop_sign(i, j) >= hue_value -25 && hue_stop_sign(i, j) <= hue_value + 25) {
+				hue_mask(i, j) = stop_sign(i, j);
+			}
+		}
+	}
+	imshow("hue mask", hue_mask);
+	imshow("Original image", stop_sign);
+	waitKey();
 
 }
