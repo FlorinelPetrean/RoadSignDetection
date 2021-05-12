@@ -5,8 +5,6 @@
 #include <opencv2/opencv.hpp>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <curses.h>
 #include <vector>
 
 #define MAX_PATH 2048
@@ -137,14 +135,14 @@ void convert_to_HSV(Mat_<Vec3b> src){
 }
 
 uchar get_hue_value(){
-    Mat_<Vec3b> src = imread("Images/stop_sign.bmp", IMREAD_COLOR);
+    Mat_<Vec3b> src = imread("ProjectImages/stop_sign.bmp", IMREAD_COLOR);
     convert_to_HSV(src);
     Mat_<uchar> hue_src = hue.clone();
     return hue_src(src.rows/4, src.cols/2);
 }
 
 int main() {
-    Mat_<Vec3b> stop_sign = imread("Images/star.bmp", IMREAD_COLOR);
+    Mat_<Vec3b> stop_sign = imread("ProjectImages/stop_sign_road.bmp", IMREAD_COLOR);
     convert_to_HSV(stop_sign);
     Mat_<uchar> hue_stop_sign = hue.clone();
 
