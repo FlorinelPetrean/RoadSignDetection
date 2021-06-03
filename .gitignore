@@ -4,6 +4,7 @@
 !.gitignore
 !project.cpp
 !project.h
+!main.cpp
 !ImageProcessingProject.docx
 !IP-projectPPT.pptx
 !ProjectImages/*
